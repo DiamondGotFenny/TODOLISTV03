@@ -1,0 +1,119 @@
+body{
+    background: #005AA7;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #FFFDE4, #005AA7);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #FFFDE4, #005AA7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    font-family: Roboto sans-serif;   
+}
+
+#Container{
+    background-color:#f7f7f7;
+    width: 46rem;
+    margin: 6.5rem auto;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+h1{
+    background-color:#2980b9;
+    margin: 0;
+    color: whitesmoke;
+    font-size: 1.5rem;
+    font-weight: normal;
+    padding: 0.7rem 1.3rem;
+    text-transform: uppercase;
+}
+.done{
+    color: grey;
+    text-decoration: line-through;
+}
+
+ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+li{
+    background: #fff;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    cursor: pointer;
+}
+
+li:nth-child(2n){
+    background: #f7f7f7;
+}
+
+input{
+    font-size: 1.2rem;
+    color: #2980b9;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.7rem 0.7rem 0.7rem 1.5rem;
+    background-color: #f7f7f7;
+    border: none;
+}
+
+input:focus{
+    background: #fff;
+    outline: none;
+    border: 3px solid #2980b9;
+}
+button{
+    outline: none;
+    background: none;
+    border: none;
+    float: right;
+    margin-top: 2px;
+    cursor: pointer;
+}
+
+button:hover{
+  -webkit-transform: scale(1.21);
+  transform: scale(1.2);
+}
+
+.fa-plus{
+    color: whitesmoke;
+    font-size: 22px !important;
+}
+.deltbtn{
+    background: #e74c3c;
+    height: 2.5rem;
+    width: 0rem;
+    margin-right: 1.3rem;
+    text-align: center;
+    color: whitesmoke;
+    display: inline-block;
+    transition: 0.3s linear;
+    opacity: 0;
+}
+
+li:hover .deltbtn{
+    width: 2.5rem;
+    opacity: 1;
+}
+
+.datepicker{
+    background: #fff;
+    width: 25%;
+    float: right;
+    display: block;
+    cursor: pointer;
+    padding: 0.5rem 0.5rem 0.6rem 0.5rem;
+}
+
+.ui-datepicker-trigger { 
+    position:relative;
+    float: right;
+    top:13px; 
+    right:-170px ; 
+    height:20px 
+}
+
+li:nth-child(2n) input{
+    background: #f7f7f7;
+}
+
+
+  
