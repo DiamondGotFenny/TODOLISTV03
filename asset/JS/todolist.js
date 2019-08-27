@@ -31,12 +31,13 @@ $.datepicker.setDefaults({
 
 //save input text and deadline date to object
 (function() {
+  const objs = [];
   //object for storing input text and deadline date
-  const saveObj = {
-    id: "",
-    item: "",
-    deadline: ""
-  };
+  function saveObj() {
+    this.id = "";
+    this.item = "";
+    this.deadline = "";
+  }
 
   //get user input from input form and add it as new li
   $("#inputText").on("keypress", function(e) {
@@ -59,7 +60,7 @@ $.datepicker.setDefaults({
   });
 
   //save the selected date to the saveObj
-  $("ul").on("change", ".datepicker", function(event) {
+  $("ll").on("change", ".datepicker", function(event) {
     const date = $(this).val();
     console.log(this);
     saveObj.deadline = date;
