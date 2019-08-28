@@ -1,8 +1,4 @@
 /************UI Control**************/
-//open or close the add input area
-$("#inputbtn").on("click", function() {
-  $("#inputText").fadeToggle();
-});
 
 //check off specific to-do item by clicking
 $("ul").on("click", "li", function() {
@@ -16,6 +12,7 @@ $("ul").on("click", ".deltbtn", function(event) {
     .fadeOut(500, function(e) {
       $(this).remove();
     });
+  removeItemFromStorage(this);
   event.stopPropagation();
 });
 
@@ -29,54 +26,95 @@ $.datepicker.setDefaults({
 
 /********************************** */
 
-//save input text and deadline date to object
-(function() {
-  const objs = [];
-  //object for storing input text and deadline date
-  function saveObj() {
-    this.id = "";
-    this.item = "";
-    this.deadline = "";
+//save object to localstorage
+function saveToLocal(obj) {
+  localStorage.setItem(obj.id, JSON.stringify(obj));
+}
+
+//get user input from input form and add it as new li
+$("#inputText").on("keypress", function(e) {
+  if (e.which === 13) {
+    handlingInput();
   }
+});
+$("#inputbtn").on("click", function() {
+  handlingInput();
+});
 
-  //get user input from input form and add it as new li
-  $("#inputText").on("keypress", function(e) {
-    if (e.which === 13) {
-      //grab text from input form
-      var inputtext = $("#inputText").val();
-      //empty the input form
-      $("#inputText").val("");
+function handlingInput() {
+  //grab text from input form
+  var inputtext = $("#inputText").val();
+  //empty the input form
+  $("#inputText").val("");
 
-      //save input content as object
+  //save input content as object
+  const saveObj = {
+    id: new Date().toISOString().replace(/[^0-9]/g, ""),
+    item: inputtext,
+    deadline: ""
+  };
 
-      saveObj.item = inputtext;
-      saveObj.id = new Date().toISOString().replace(/[^0-9]/g, "");
+  //save to local storage
+  saveToLocal(saveObj);
+  //rendering input content
+  inputRender(saveObj.item, saveObj.id);
+}
 
-      //save to local storage
-      saveToLocal(saveObj);
-      //rendering input content
-      inputRender(inputtext);
+//save the selected date to the saveObj
+$("ul").on("change", ".datepicker", function(event) {
+  const date = $(this).val();
+
+  //get the unique id from the parent object-li
+  let li_id = $(event.target)
+    .parent()
+    .attr("id");
+
+  //compare the id to the key in localstorage then retrieve the matched object
+  //then assign that deadline to the copy of that object
+  let obj;
+  $.each(localStorage, function(key, value) {
+    if (key === li_id) {
+      obj = JSON.parse(value);
     }
   });
+  obj.deadline = date;
 
-  //save the selected date to the saveObj
-  $("ll").on("change", ".datepicker", function(event) {
-    const date = $(this).val();
-    console.log(this);
-    saveObj.deadline = date;
-    //save to local storage
-    saveToLocal(saveObj);
-  });
-})();
+  //save the updated object to local storage
+  saveToLocal(obj);
+});
 
-var inputRender = function(inputText) {
+const inputRender = function(inputText, id) {
   //create a new li and add it to the ul
   $("ul").append(
-    '<li><span class="deltbtn"><i class="far fa-trash-alt"></i></span>' +
-      inputText +
-      '<input type="text" class="datepicker"></li>'
+    `<li id=${id}><span class="deltbtn"><i class="far fa-trash-alt"></i></span>${inputText}
+        <input type="text" class="datepicker"></li>`
   );
 
+  //render icon
+  renderDeadlineIcon();
+};
+
+$(window).on("load", function() {
+  $.each(localStorage, function(key, value) {
+    if (localStorage.length > 0 && key !== "length") {
+      const obj = JSON.parse(value);
+      $("ul").append(
+        `<li id=${obj.id}><span class="deltbtn"><i class="far fa-trash-alt"></i></span>${obj.item}
+          <input type="text" class="datepicker"></li>`
+      );
+
+      //render deadline
+      $(`#${obj.id}`)
+        .find(".datepicker")
+        .val(obj.deadline);
+
+      //render icon
+      renderDeadlineIcon();
+    }
+  });
+});
+
+function renderDeadlineIcon() {
   //create deadline by using jQueryui.datepicker() component
   $(".datepicker").datepicker({ minDate: new Date() });
 
@@ -84,18 +122,16 @@ var inputRender = function(inputText) {
   $("ul").on("click", ".datepicker", function(event) {
     event.stopPropagation();
   });
-};
-
-/* //save to localstorage after adding deadline
-$("ul").on("change", event => {
-  saveToLocal();
-}); */
-
-function saveToLocal(obj) {
-  localStorage.setItem(obj.id, JSON.stringify(obj));
-  console.log(JSON.parse(localStorage.getItem(obj.id)));
 }
 
+function removeItemFromStorage(elem) {
+  const id = $(elem)
+    .parent()
+    .attr("id");
+  localStorage.removeItem(id);
+}
+
+/* //test only
 $("#clearAll").on("click", function() {
   localStorage.clear();
 });
@@ -109,4 +145,4 @@ function printItems() {
       console.log(localStorage[key]);
     }
   }
-}
+} */
