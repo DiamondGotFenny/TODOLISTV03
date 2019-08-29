@@ -12,7 +12,8 @@ $("ul").on("click", ".deltbtn", function(event) {
     .fadeOut(500, function(e) {
       $(this).remove();
     });
-  removeItemFromStorage(this);
+  removeItemFromMap(this);
+  saveToLocal();
   event.stopPropagation();
 });
 
@@ -26,9 +27,49 @@ $.datepicker.setDefaults({
 
 /********************************** */
 
+//map for new create items. use map for keeping the order of items when reload
+let myMapItems = new Map();
+
+//save object to map
+function saveToMap(obj) {
+  myMapItems.set(obj.id, obj);
+}
+
+//convert map to objects
+function mapToObject(myMap) {
+  const obj = {};
+  for (let [k, v] of myMap) obj[k] = v;
+  return obj;
+}
+
+//convert objects back to map
+function objToMap(obj) {
+  const newMap = new Map();
+  for (let [key, value] of Object.entries(obj)) {
+    newMap.set(key, value);
+    console.log(obj);
+  }
+
+  return newMap;
+}
+
+//for setting local storage
+const storageName = "storageMap";
+
 //save object to localstorage
-function saveToLocal(obj) {
-  localStorage.setItem(obj.id, JSON.stringify(obj));
+function saveToLocal() {
+  let myMapObj = {};
+  myMapObj = mapToObject(myMapItems);
+  const objsJson = JSON.stringify(myMapObj);
+  localStorage.setItem(storageName, objsJson);
+}
+
+//retrieve object from local and convert to map
+function loadFromLocal() {
+  if (localStorage.length > 0) {
+    const myItemObj = JSON.parse(localStorage.getItem(storageName));
+    myMapItems = objToMap(myItemObj);
+  }
 }
 
 //get user input from input form and add it as new li
@@ -54,8 +95,10 @@ function handlingInput() {
     deadline: ""
   };
 
+  //save to map
+  saveToMap(saveObj);
   //save to local storage
-  saveToLocal(saveObj);
+  saveToLocal();
   //rendering input content
   inputRender(saveObj.item, saveObj.id);
 }
@@ -69,18 +112,15 @@ $("ul").on("change", ".datepicker", function(event) {
     .parent()
     .attr("id");
 
-  //compare the id to the key in localstorage then retrieve the matched object
-  //then assign that deadline to the copy of that object
-  let obj;
-  $.each(localStorage, function(key, value) {
-    if (key === li_id) {
-      obj = JSON.parse(value);
-    }
-  });
+  const obj = myMapItems.get(li_id);
+
   obj.deadline = date;
 
-  //save the updated object to local storage
-  saveToLocal(obj);
+  //save update obj to map
+  saveToMap(obj);
+  //myMapItems.set(li_id,obj)
+  //save the updated map to local storage
+  saveToLocal();
 });
 
 const inputRender = function(inputText, id) {
@@ -95,23 +135,23 @@ const inputRender = function(inputText, id) {
 };
 
 $(window).on("load", function() {
-  $.each(localStorage, function(key, value) {
-    if (localStorage.length > 0 && key !== "length") {
-      const obj = JSON.parse(value);
-      $("ul").append(
-        `<li id=${obj.id}><span class="deltbtn"><i class="far fa-trash-alt"></i></span>${obj.item}
-          <input type="text" class="datepicker"></li>`
-      );
+  loadFromLocal();
+  console.log(myMapItems);
+  for ([key, value] of myMapItems) {
+    const obj = value;
+    $("ul").append(
+      `<li id=${obj.id}><span class="deltbtn"><i class="far fa-trash-alt"></i></span>${obj.item}
+    <input type="text" class="datepicker"></li>`
+    );
 
-      //render deadline
-      $(`#${obj.id}`)
-        .find(".datepicker")
-        .val(obj.deadline);
+    //render deadline
+    $(`#${obj.id}`)
+      .find(".datepicker")
+      .val(obj.deadline);
 
-      //render icon
-      renderDeadlineIcon();
-    }
-  });
+    //render icon
+    renderDeadlineIcon();
+  }
 });
 
 function renderDeadlineIcon() {
@@ -124,16 +164,17 @@ function renderDeadlineIcon() {
   });
 }
 
-function removeItemFromStorage(elem) {
+function removeItemFromMap(elem) {
   const id = $(elem)
     .parent()
     .attr("id");
-  localStorage.removeItem(id);
+  myMapItems.delete(id);
 }
 
 /* //test only
 $("#clearAll").on("click", function() {
   localStorage.clear();
+  myMapItems.clear();
 });
 $("#printItems").on("click", function() {
   printItems();
