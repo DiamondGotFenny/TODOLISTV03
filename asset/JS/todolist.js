@@ -132,7 +132,7 @@
   const inputRender = function(obj) {
     //create a new li and add it to the ul
     $("ul").append(
-      `<li id=${obj.id} class=${obj.done}><span class="deltbtn"><i class="far fa-trash-alt"></i></span>${obj.item}
+      `<li id=${obj.id} class=${obj.done}><span class="deltbtn"><i class="far fa-trash-alt"></i></span><span class="textContent">${obj.item}</span>
         <input type="text" class="datepicker"></li>`
     );
 
@@ -147,9 +147,9 @@
       $("ul").append(
         `<li id=${obj.id} class=${
           obj.done ? "done" : ""
-        }><span class="deltbtn"><i class="far fa-trash-alt"></i></span>${
+        }><span class="deltbtn"><i class="far fa-trash-alt"></i></span><span class="textContent">${
           obj.item
-        }
+        }</span>
     <input type="text" class="datepicker"></li>`
       );
 

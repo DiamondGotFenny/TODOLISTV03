@@ -14,38 +14,11 @@ body {
   font-family: Roboto sans-serif;
 }
 
-@media (max-width: 767px) {
-  body {
-    background: #005aa7; /* fallback for old browsers */
-    background: -webkit-linear-gradient(
-      to left,
-      #fffde4,
-      #005aa7
-    ); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(
-      to left,
-      #fffde4,
-      #005aa7
-    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-    background-repeat: no-repeat;
-    background-repeat: repeat-y;
-    font-family: Roboto sans-serif;
-  }
-}
-
 #Container {
   background-color: #f7f7f7;
   width: 46rem;
   margin: 6.5rem auto;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-}
-
-@media (max-width: 767px) {
-  #Container {
-    width: 100%;
-    background-color: transparent;
-  }
 }
 
 h1 {
@@ -129,6 +102,9 @@ li:hover .deltbtn {
   opacity: 1;
 }
 
+.textContent {
+  overflow: scroll;
+}
 .datepicker {
   background: #fff;
   width: 25%;
@@ -148,4 +124,54 @@ li:hover .deltbtn {
 
 li:nth-child(2n) input {
   background: #f7f7f7;
+}
+
+/*for smartphone*/
+@media (max-width: 767px) {
+  body {
+    background: #005aa7; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+      to left,
+      #fffde4,
+      #005aa7
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      to left,
+      #fffde4,
+      #005aa7
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    background-repeat: no-repeat;
+    background-repeat: repeat-y;
+    font-family: Roboto sans-serif;
+  }
+
+  #Container {
+    width: 100%;
+    background-color: transparent;
+  }
+
+  button {
+    margin-top: 0;
+  }
+  .deltbtn {
+    height: 2.5rem;
+    width: 0rem;
+    margin-right: 0;
+  }
+  .textContent {
+    display: inline-block;
+    width: 40%;
+    overflow: scroll;
+    margin-left: 1rem;
+    margin-right: 0;
+  }
+  .datepicker {
+    display: inline-block;
+    width: 35%;
+  }
+
+  .ui-datepicker-trigger {
+    right: -7.5rem;
+  }
 }
