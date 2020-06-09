@@ -49,6 +49,7 @@ li {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  overflow: hidden;
 }
 
 li:nth-child(2n) {
@@ -109,14 +110,12 @@ li:hover .deltbtn {
 .textContent {
   white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
   width: 60%;
 }
 .textContent:hover {
   overflow: visible;
-  white-space: normal;
-  max-width: 400%;
-  width: 400%;
-  z-index: 1;
+  width: 100%;
 }
 .datepicker-container {
   width: 30%;
@@ -124,7 +123,6 @@ li:hover .deltbtn {
 .datepicker {
   background: #fff;
   width: 90%;
-
   cursor: pointer;
   padding: 0.5rem 0.5rem 0.6rem 0.5rem;
 }
