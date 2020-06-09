@@ -46,6 +46,9 @@ li {
   height: 2.5rem;
   line-height: 2.5rem;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 li:nth-child(2n) {
@@ -60,6 +63,7 @@ input {
   padding: 0.7rem 0.7rem 0.7rem 1.5rem;
   background-color: #f7f7f7;
   border: none;
+  overflow-x: hidden;
 }
 
 input:focus {
@@ -103,13 +107,24 @@ li:hover .deltbtn {
 }
 
 .textContent {
-  overflow: scroll;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 60%;
+}
+.textContent:hover {
+  overflow: visible;
+  white-space: normal;
+  max-width: 400%;
+  width: 400%;
+  z-index: 1;
+}
+.datepicker-container {
+  width: 30%;
 }
 .datepicker {
   background: #fff;
-  width: 25%;
-  float: right;
-  display: block;
+  width: 90%;
+
   cursor: pointer;
   padding: 0.5rem 0.5rem 0.6rem 0.5rem;
 }
@@ -117,8 +132,8 @@ li:hover .deltbtn {
 .ui-datepicker-trigger {
   position: relative;
   float: right;
-  top: 13px;
-  right: -170px;
+  right: 4rem;
+  top: 11px;
   height: 20px;
 }
 

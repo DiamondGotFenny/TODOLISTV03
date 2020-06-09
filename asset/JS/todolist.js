@@ -1,8 +1,8 @@
-(function() {
+(function () {
   /************UI Control**************/
 
   //check off specific to-do item by clicking
-  $("ul").on("click", "li", function() {
+  $("ul").on("click", "li", function () {
     $(this).toggleClass("done");
     const id = $(this).attr("id");
     const obj = myMapItems.get(id);
@@ -12,10 +12,10 @@
   });
 
   //click on delete button to delete item
-  $("ul").on("click", ".deltbtn", function(event) {
+  $("ul").on("click", ".deltbtn", function (event) {
     $(this)
       .parent()
-      .fadeOut(500, function(e) {
+      .fadeOut(500, function (e) {
         $(this).remove();
       });
     removeItemFromMap(this);
@@ -28,7 +28,7 @@
     showOn: "both",
     buttonImageOnly: true,
     buttonImage: "deadlineicon.svg",
-    buttonText: "Set Deadline"
+    buttonText: "Set Deadline",
   });
 
   /********************************** */
@@ -78,12 +78,12 @@
   }
 
   //get user input from input form and add it as new li
-  $("#inputText").on("keypress", function(e) {
+  $("#inputText").on("keypress", function (e) {
     if (e.which === 13) {
       handlingInput();
     }
   });
-  $("#inputbtn").on("click", function() {
+  $("#inputbtn").on("click", function () {
     handlingInput();
   });
 
@@ -98,7 +98,7 @@
       id: new Date().toISOString().replace(/[^0-9]/g, ""),
       item: inputtext,
       done: false,
-      deadline: ""
+      deadline: "",
     };
 
     //save to map
@@ -110,13 +110,11 @@
   }
 
   //save the selected date to the saveObj
-  $("ul").on("change", ".datepicker", function(event) {
+  $("ul").on("change", ".datepicker", function (event) {
     const date = $(this).val();
 
     //get the unique id from the parent object-li
-    let li_id = $(event.target)
-      .parent()
-      .attr("id");
+    let li_id = $(event.target).parent().attr("id");
 
     const obj = myMapItems.get(li_id);
 
@@ -129,18 +127,18 @@
     saveToLocal();
   });
 
-  const inputRender = function(obj) {
+  const inputRender = function (obj) {
     //create a new li and add it to the ul
     $("ul").append(
       `<li id=${obj.id} class=${obj.done}><span class="deltbtn"><i class="far fa-trash-alt"></i></span><span class="textContent">${obj.item}</span>
-        <input type="text" class="datepicker"></li>`
+       <div class="datepicker-container"><input type="text" class="datepicker"></div></li>`
     );
 
     //render icon
     renderDeadlineIcon();
   };
 
-  $(window).on("load", function() {
+  $(window).on("load", function () {
     loadFromLocal();
     for ([key, value] of myMapItems) {
       const obj = value;
@@ -150,13 +148,11 @@
         }><span class="deltbtn"><i class="far fa-trash-alt"></i></span><span class="textContent">${
           obj.item
         }</span>
-    <input type="text" class="datepicker"></li>`
+        <div class="datepicker-container"><input type="text" class="datepicker"></div></li>`
       );
 
       //render deadline
-      $(`#${obj.id}`)
-        .find(".datepicker")
-        .val(obj.deadline);
+      $(`#${obj.id}`).find(".datepicker").val(obj.deadline);
 
       //render icon
       renderDeadlineIcon();
@@ -168,15 +164,13 @@
     $(".datepicker").datepicker({ minDate: new Date() });
 
     //this will stop add "done" to item while selecting deadline
-    $("ul").on("click", ".datepicker", function(event) {
+    $("ul").on("click", ".datepicker", function (event) {
       event.stopPropagation();
     });
   }
 
   function removeItemFromMap(elem) {
-    const id = $(elem)
-      .parent()
-      .attr("id");
+    const id = $(elem).parent().attr("id");
     myMapItems.delete(id);
   }
 
